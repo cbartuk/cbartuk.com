@@ -16,12 +16,7 @@ type Inputs = {
 type Props = {};
 
 export default function ContactMe({}: Props) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
     window.location.href = `mailto:hello@cbartuk.com?subject=${formData.subject}&body=Hi, my name is ${formData.name}, ${formData.message} (sent from ${formData.email})`;
