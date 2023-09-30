@@ -1,9 +1,24 @@
 import React from "react";
 import { motion } from "framer-motion";
 import ExperienceCard from "./ExperienceCard";
-type Props = {};
+import { Experience } from "@/typings";
 
-export default function WorkExperience({}: Props) {
+type Props = {
+  experiences: Experience[];
+};
+
+export default function WorkExperience({ experiences }: Props) {
+  const sortedExperiences = experiences.sort((a, b) => {
+    if (a.isCurrentlyWorkingHere && !b.isCurrentlyWorkingHere) {
+      return -1;
+    }
+    if (!a.isCurrentlyWorkingHere && b.isCurrentlyWorkingHere) {
+      return 1;
+    }
+    const dateA: any = new Date(a.dateStarted).getTime();
+    const dateB: any = new Date(b.dateStarted).getTime();
+    return dateB - dateA;
+  });
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -16,11 +31,9 @@ export default function WorkExperience({}: Props) {
       </h3>
 
       <div className="w-full flex space-x-5 overflow-x-scroll p-10 snap-x snap-mandatory modifyScrollbar">
-        <ExperienceCard />
-        <ExperienceCard />
-        <ExperienceCard />
-        <ExperienceCard />
-        <ExperienceCard />
+        {sortedExperiences.map((experience) => (
+          <ExperienceCard key={experience._id} experience={experience} />
+        ))}
       </div>
     </motion.div>
   );

@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@heroicons/react": "2.0.11",
+    "@portabletext/react": "^3.0.9",
+    "@sanity/image-url": "^1.0.2",
     "framer-motion": "7.3.5",
     "next": "12.3.0",
+    "next-sanity": "^5.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.35.0",
