@@ -1,14 +1,20 @@
 import { PageInfo } from "@/typings";
 
-export const fetchPageInfo = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/getPageInfo`
-  );
+export const fetchPageInfo = async (): Promise<PageInfo | null> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getPageInfo`
+    );
 
-  const data = await res.json();
-  const pageInfo: PageInfo = data.pageInfo;
+    if (!res.ok) {
+      throw new Error('Failed to fetch page info');
+    }
 
-  // console.log("fetching", pageInfo);
-
-  return pageInfo;
+    const data = await res.json();
+    const pageInfo: PageInfo = data.pageInfo;
+    return pageInfo;
+  } catch (error) {
+    console.error('Error fetching page info:', error);
+    return null;
+  }
 };

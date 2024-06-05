@@ -16,36 +16,53 @@ import { fetchPageInfo } from "@/utils/fetchPageInfo";
 import { fetchExperiences } from "@/utils/fetchExperiences";
 import { fetchProjects } from "@/utils/fetchProjects";
 import { fetchSkills } from "@/utils/fetchSkills";
-import { fetchSocial } from "@/utils/fetchSocials";
+import { fetchSocials } from "@/utils/fetchSocials";
 
 type Props = {
-  pageInfo: PageInfo;
+  pageInfo: PageInfo | null;
   experiences: Experience[];
   projects: Project[];
   skills: Skill[];
   socials: Social[];
 };
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-  const pageInfo: PageInfo = await fetchPageInfo();
-  const experiences: Experience[] = await fetchExperiences();
-  const projects: Project[] = await fetchProjects();
-  const skills: Skill[] = await fetchSkills();
-  const socials: Social[] = await fetchSocial();
+(async () => {
+  const pageInfo = await fetchPageInfo();
+  console.log(pageInfo);
+})();
 
-  return {
-    props: {
-      pageInfo,
-      experiences,
-      projects,
-      skills,
-      socials,
-    },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 10,
-  };
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  try {
+    const pageInfo: PageInfo | null = await fetchPageInfo();
+    const experiences: Experience[] = await fetchExperiences();
+    const projects: Project[] = await fetchProjects();
+    const skills: Skill[] = await fetchSkills();
+    const socials: Social[] = await fetchSocials();
+
+    return {
+      props: {
+        pageInfo,
+        experiences,
+        projects,
+        skills,
+        socials,
+      },
+      revalidate: 10,
+    };
+  } catch (error) {
+    console.error("Error in getStaticProps:", error);
+
+    return {
+      props: {
+        pageInfo: null,
+        experiences: [],
+        projects: [],
+        skills: [],
+        socials: [],
+      },
+      revalidate: 10,
+    };
+  }
 };
 
 export default function Home({
@@ -55,6 +72,9 @@ export default function Home({
   skills,
   socials,
 }: Props) {
+  if (!pageInfo) {
+    return <div>Error loading page info</div>;
+  }
   return (
     <div className="bg-[rgb(36,36,36)] text-white h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden z-0 modifyScrollbar">
       <Head>

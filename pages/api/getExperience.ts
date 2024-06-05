@@ -17,9 +17,14 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | {error: string}>
 ) {
-  const experiences: Experience[] = await sanityClient.fetch(query);
-
-  res.status(200).json({ experiences });
+  try {
+    const experiences: Experience[] = await sanityClient.fetch(query);
+    console.log({ experiences });
+    res.status(200).json({ experiences });
+  } catch (error) {
+    console.error("Error fetching experiences:", error);
+    res.status(500).json({ error: "Error fetching experiences" });
+  }
 }
