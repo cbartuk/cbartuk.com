@@ -73,7 +73,23 @@ export default function Home({
   socials,
 }: Props) {
   if (!pageInfo) {
-    return <div>Error loading page info</div>;
+    return (
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-900 text-white">
+        <Head>
+          <title>Error</title>
+        </Head>
+        <div className="text-3xl font-bold mb-4">Error loading page info</div>
+        <p className="text-lg mb-8">
+          An error occurred while loading the page information.
+        </p>
+        <Link href="/">
+          <a className="flex items-center gap-2 bg-yellow-500 text-gray-900 py-2 px-4 rounded hover:bg-yellow-600 transition duration-300">
+            <HomeIcon className="h-6 w-6" />
+            <span>Back to Home</span>
+          </a>
+        </Link>
+      </div>
+    );
   }
   return (
     <div className="bg-[rgb(36,36,36)] text-white h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden z-0 modifyScrollbar">
