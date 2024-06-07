@@ -12,8 +12,24 @@ export default defineType({
       type: 'string',
     },
     {
-      name: 'image',
-      title: 'Image',
+      name: 'desktopImage',
+      title: 'DesktopImage',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'tabletImage',
+      title: 'TabletImage',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'mobileImage',
+      title: 'MobileImage',
       type: 'image',
       options: {
         hotspot: true,

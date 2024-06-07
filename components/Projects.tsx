@@ -50,7 +50,7 @@ export default function Projects({ projects }: Props) {
                   className="relative w-[400px] h-[250px] md:w-[500px] md:h-[300px] object-contain z-20"
                 />
                 <img
-                  src={urlFor(project?.image).url()}
+                  src={urlFor(project?.desktopImage).url()}
                   alt={project?.title}
                   className="absolute w-[262px] h-[168px] min-[552px]:w-[307px] min-[552px]:h-[210px] min-[552px]:top-[8%] sm:w-[310px] sm:h-[210px] md:w-[384px] md:h-[238px] top-[15%] sm:top-[8%] md:top-[7%] left-[12%] md:left-[12%] object-cover z-10"
                 />
@@ -62,7 +62,7 @@ export default function Projects({ projects }: Props) {
                   className="relative w-[185px] h-[240px] md:w-[300px] md:h-[350px] object-contain z-30"
                 />
                 <img
-                  src={urlFor(project?.image).url()}
+                  src={urlFor(project?.tabletImage).url()}
                   alt={project?.title}
                   className="absolute w-[169px] h-[130px] md:w-[275px] md:h-[208px] top-[23%] md:top-[20%] left-[5%] object-cover z-20"
                 />
@@ -74,7 +74,7 @@ export default function Projects({ projects }: Props) {
                   className="relative w-[75px] h-[200px] md:w-[140px] md:h-[250px] object-contain z-30"
                 />
                 <img
-                  src={urlFor(project?.image).url()}
+                  src={urlFor(project?.mobileImage).url()}
                   alt={project?.title}
                   className="absolute w-[66px] h-[134px] md:w-[107px] md:h-[234px] top-[16%] md:top-[3%] left-[5%] md:left-[10%] object-cover z-20"
                 />
