@@ -12,25 +12,13 @@ export default function Header({ socials }: Props) {
   const orderedSocials = [...socials].reverse();
 
   return (
-    <header className="sticky top-0 p-5 flex items-start justify-between max-w-7xl mx-auto z-20 xl:items-center">
+    <header className="sticky top-0 p-5 flex items-start justify-between max-w-7xl mx-auto z-20 xl:items-center backdrop-blur-md bg-[rgb(36,36,36)]/80">
       <motion.div
-        initial={{
-          x: -500,
-          opacity: 0,
-          scale: 0.5,
-        }}
-        animate={{
-          x: 0,
-          opacity: 1,
-          scale: 1,
-        }}
-        transition={{
-          duration: 1.5,
-        }}
+        initial={{ x: -500, opacity: 0, scale: 0.5 }}
+        animate={{ x: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 1.5 }}
         className="flex flex-row items-center"
       >
-        {/* Social Icons */}
-
         {orderedSocials.map((social, index) => (
           <SocialIcon
             key={social._id || `${social.url}-${index}`}
@@ -45,19 +33,9 @@ export default function Header({ socials }: Props) {
       </motion.div>
 
       <motion.div
-        initial={{
-          x: 500,
-          opacity: 0,
-          scale: 0.5,
-        }}
-        animate={{
-          x: 0,
-          opacity: 1,
-          scale: 1,
-        }}
-        transition={{
-          duration: 1.5,
-        }}
+        initial={{ x: 500, opacity: 0, scale: 0.5 }}
+        animate={{ x: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 1.5 }}
         className="flex flex-row items-center text-gray-300 cursor-pointer"
       >
         <SocialIcon
@@ -69,7 +47,7 @@ export default function Header({ socials }: Props) {
           style={{ height: 35, width: 35 }}
         />
         <Link href="#contact">
-          <p className="uppercase hidden md:inline-flex text-sm text-gray-400">
+          <p className="uppercase hidden md:inline-flex text-sm text-gray-400 hover:text-[#F7AB0A]/60 transition-colors">
             Get In Touch
           </p>
         </Link>

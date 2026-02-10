@@ -35,7 +35,7 @@ export default function ContactMe({ pageInfo }: Props) {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1.5 }}
-      className="h-screen flex relative flex-col max-w-5xl px-6 sm:px-10 pt-24 pb-10 mx-auto items-center justify-center"
+      className="h-screen flex relative flex-col max-w-5xl px-4 sm:px-8 lg:px-12 pt-24 pb-10 mx-auto items-center justify-center"
     >
       <h3 className="absolute top-24 uppercase tracking-[20px] text-gray-500 text-2xl">
         Contact

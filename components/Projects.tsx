@@ -22,75 +22,80 @@ export default function Projects({ projects }: Props) {
 
       <div className="relative w-full flex overflow-x-scroll overflow-y-hidden snap-x snap-mandatory z-20 modifyScrollbar">
         {projects.map((project, i) => {
-          const hasDesktop = Boolean(getImageUrl(project?.desktopImage));
-          const hasTablet = Boolean(getImageUrl(project?.tabletImage));
-          const hasMobile = Boolean(getImageUrl(project?.mobileImage));
+          const desktopUrl = getImageUrl(project?.desktopImage);
+          const tabletUrl = getImageUrl(project?.tabletImage);
+          const mobileUrl = getImageUrl(project?.mobileImage);
+          const hasDesktop = Boolean(desktopUrl);
+          const hasTablet = Boolean(tabletUrl);
+          const hasMobile = Boolean(mobileUrl);
 
           return (
             <div
               key={project._id || `${project.title}-${i}`}
-              className="w-screen flex-shrink-0 snap-center flex flex-col items-center justify-center px-8 sm:px-16 md:px-20 h-screen gap-6"
+              className="w-screen flex-shrink-0 snap-center flex flex-col space-y-5 items-center justify-center p-20 md:p-44 h-screen"
             >
-              {/* Device Mockups */}
               <motion.div
-                initial={{ y: -200, opacity: 0 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: -300, opacity: 0 }}
                 transition={{ duration: 1.2 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
+                className="relative flex justify-center items-center"
               >
                 {hasDesktop ? (
-                  <DesktopAnchoredLayout
+                  <DesktopLayout
                     project={project}
-                    hasTablet={hasTablet}
-                    hasMobile={hasMobile}
+                    desktopUrl={desktopUrl}
+                    tabletUrl={hasTablet ? tabletUrl : ""}
+                    mobileUrl={hasMobile ? mobileUrl : ""}
                   />
                 ) : (
-                  <StandaloneDeviceLayout
+                  <StandaloneLayout
                     project={project}
-                    hasTablet={hasTablet}
-                    hasMobile={hasMobile}
+                    tabletUrl={hasTablet ? tabletUrl : ""}
+                    mobileUrl={hasMobile ? mobileUrl : ""}
                   />
                 )}
               </motion.div>
 
-              {/* Project Info */}
-              <div className="text-center max-w-2xl space-y-3">
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500 tracking-widest uppercase">
-                  <span>
-                    {i + 1} of {projects.length}
+              <div className="space-y-4 px-0 max-w-6xl">
+                <h4 className="text-xl md:text-2xl xl:text-4xl font-semibold text-center">
+                  <span className="text-xs text-gray-500 tracking-widest uppercase block mb-2">
+                    {i + 1} / {projects.length}
                   </span>
-                </div>
-
-                <h4 className="text-lg sm:text-xl md:text-2xl xl:text-3xl font-semibold text-white">
                   {project?.title}
                 </h4>
 
-                <div className="flex items-center justify-center flex-wrap gap-2">
-                  {project?.technologies.map((tech, techIndex) => (
-                    <img
-                      key={tech._id || `${tech.title}-${techIndex}`}
-                      src={getImageUrl(tech.image)}
-                      alt={tech.title}
-                      title={tech.title}
-                      className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
-                    />
-                  ))}
+                <div className="flex items-center space-x-3 justify-center">
+                  {project?.technologies.map((tech, techIndex) => {
+                    const url = getImageUrl(tech.image);
+                    return url ? (
+                      <img
+                        className="w-7 h-7 sm:w-10 sm:h-10 object-contain"
+                        key={tech._id || `${tech.title}-${techIndex}`}
+                        src={url}
+                        alt={tech.title}
+                        title={tech.title}
+                      />
+                    ) : null;
+                  })}
                 </div>
 
-                <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+                <p className="text-[0.9rem] md:text-lg text-center md:text-left text-gray-400">
                   {project?.summary}
                 </p>
 
                 {project?.linkToBuild && (
-                  <a
-                    href={project.linkToBuild}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#F7AB0A] hover:text-[#F7AB0A]/80 text-sm font-medium transition-colors"
-                  >
-                    View Project
-                    <span aria-hidden="true">&rarr;</span>
-                  </a>
+                  <div className="text-center">
+                    <a
+                      href={project.linkToBuild}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[#F7AB0A] hover:text-[#F7AB0A]/80 text-sm font-medium transition-colors"
+                    >
+                      View Project
+                      <span aria-hidden="true">&rarr;</span>
+                    </a>
+                  </div>
                 )}
               </div>
             </div>
@@ -103,111 +108,123 @@ export default function Projects({ projects }: Props) {
   );
 }
 
-/* Desktop-anchored overlapping layout (original style, with conditionals) */
-function DesktopAnchoredLayout({
+/* ------------------------------------------------------------------ */
+/*  Desktop-anchored overlapping layout — original pixel dimensions    */
+/* ------------------------------------------------------------------ */
+function DesktopLayout({
   project,
-  hasTablet,
-  hasMobile,
+  desktopUrl,
+  tabletUrl,
+  mobileUrl,
 }: {
   project: Project;
-  hasTablet: boolean;
-  hasMobile: boolean;
+  desktopUrl: string;
+  tabletUrl: string;
+  mobileUrl: string;
 }) {
   return (
-    <div className="relative flex justify-center items-center">
-      {/* Desktop (center anchor) */}
+    <>
+      {/* MacBook — center anchor */}
       <div className="relative flex justify-center items-center z-20">
         <img
           src="/images/macbook-mockup.png"
           alt="Desktop frame"
-          className="relative w-[320px] sm:w-[400px] md:w-[500px] object-contain z-20"
+          className="relative w-[400px] h-[250px] md:w-[500px] md:h-[300px] object-contain z-20"
         />
         <img
-          src={getImageUrl(project.desktopImage)}
-          alt={`${project.title} - Desktop`}
-          className="absolute w-[77%] h-[78%] top-[5%] left-[12%] object-cover z-10"
+          src={desktopUrl}
+          alt={`${project.title} – Desktop`}
+          className="absolute w-[262px] h-[168px] sm:w-[310px] sm:h-[210px] md:w-[384px] md:h-[238px] top-[15%] sm:top-[8%] md:top-[7%] left-[12%] object-cover z-10"
         />
       </div>
 
-      {/* Tablet (left overlay) */}
-      {hasTablet && (
-        <div className="absolute flex justify-center items-center -left-16 sm:-left-20 md:-left-[10rem] top-4 md:top-2 z-30">
+      {/* iPad — left overlay */}
+      {tabletUrl && (
+        <div className="absolute flex justify-center items-center -left-20 md:-left-[13rem] top-8 md:top-4 z-30">
           <img
             src="/images/ipad.png"
             alt="Tablet frame"
-            className="relative w-[150px] sm:w-[185px] md:w-[260px] object-contain z-30"
+            className="relative w-[185px] h-[240px] md:w-[300px] md:h-[350px] object-contain z-30"
           />
           <img
-            src={getImageUrl(project.tabletImage)}
-            alt={`${project.title} - Tablet`}
-            className="absolute w-[91%] h-[72%] top-[14%] left-[4%] object-cover z-20"
+            src={tabletUrl}
+            alt={`${project.title} – Tablet`}
+            className="absolute w-[169px] h-[130px] md:w-[275px] md:h-[208px] top-[23%] md:top-[20%] left-[5%] object-cover z-20"
           />
         </div>
       )}
 
-      {/* Mobile (right overlay) */}
-      {hasMobile && (
-        <div className="absolute flex justify-center items-center -right-2 sm:-right-4 md:-right-[3rem] top-10 md:top-6 z-30">
+      {/* iPhone — right overlay */}
+      {mobileUrl && (
+        <div className="absolute flex justify-center items-center -right-4 md:-right-[4rem] top-16 md:top-9 z-30">
           <img
             src="/images/iphone-mockup.png"
             alt="Mobile frame"
-            className="relative w-[60px] sm:w-[75px] md:w-[120px] object-contain z-30"
+            className="relative w-[75px] h-[200px] md:w-[140px] md:h-[250px] object-contain z-30"
           />
           <img
-            src={getImageUrl(project.mobileImage)}
-            alt={`${project.title} - Mobile`}
-            className="absolute w-[85%] h-[90%] top-[5%] left-[7%] object-cover z-20 rounded-[6px] md:rounded-[10px]"
+            src={mobileUrl}
+            alt={`${project.title} – Mobile`}
+            className="absolute w-[66px] h-[134px] md:w-[107px] md:h-[234px] top-[16%] md:top-[3%] left-[5%] md:left-[10%] object-cover z-20"
           />
         </div>
       )}
-    </div>
+    </>
   );
 }
 
-/* Layout for projects without a desktop image */
-function StandaloneDeviceLayout({
+/* ------------------------------------------------------------------ */
+/*  Standalone layout — no desktop, tablet/mobile larger               */
+/* ------------------------------------------------------------------ */
+function StandaloneLayout({
   project,
-  hasTablet,
-  hasMobile,
+  tabletUrl,
+  mobileUrl,
 }: {
   project: Project;
-  hasTablet: boolean;
-  hasMobile: boolean;
+  tabletUrl: string;
+  mobileUrl: string;
 }) {
-  const isMobileOnly = hasMobile && !hasTablet;
+  const isMobileOnly = Boolean(mobileUrl) && !tabletUrl;
 
   return (
     <div className="flex items-end justify-center gap-6 sm:gap-10">
-      {hasTablet && (
-        <div className="relative">
+      {/* Tablet — ~1.4× overlay size */}
+      {tabletUrl && (
+        <div className="relative flex justify-center items-center">
           <img
             src="/images/ipad.png"
             alt="Tablet frame"
-            className="relative w-[200px] sm:w-[260px] md:w-[320px] object-contain z-20"
+            className="relative w-[260px] h-[336px] md:w-[420px] md:h-[490px] object-contain z-20"
           />
           <img
-            src={getImageUrl(project.tabletImage)}
-            alt={`${project.title} - Tablet`}
-            className="absolute w-[91%] h-[72%] top-[14%] left-[4%] object-cover z-10"
+            src={tabletUrl}
+            alt={`${project.title} – Tablet`}
+            className="absolute w-[237px] h-[182px] md:w-[385px] md:h-[291px] top-[23%] md:top-[20%] left-[5%] object-cover z-10"
           />
         </div>
       )}
 
-      {hasMobile && (
-        <div className="relative">
+      {/* iPhone — mobile only ≈ 1.8×, alongside tablet ≈ 1.3× */}
+      {mobileUrl && (
+        <div className="relative flex justify-center items-center">
           <img
             src="/images/iphone-mockup.png"
             alt="Mobile frame"
             className={`relative object-contain z-20 ${
               isMobileOnly
-                ? "w-[140px] sm:w-[170px] md:w-[200px]"
-                : "w-[90px] sm:w-[110px] md:w-[130px]"
+                ? "w-[135px] h-[360px] md:w-[210px] md:h-[375px]"
+                : "w-[98px] h-[260px] md:w-[182px] md:h-[325px]"
             }`}
           />
           <img
-            src={getImageUrl(project.mobileImage)}
-            alt={`${project.title} - Mobile`}
-            className="absolute w-[85%] h-[90%] top-[5%] left-[7%] object-cover z-10 rounded-[10px] md:rounded-[14px]"
+            src={mobileUrl}
+            alt={`${project.title} – Mobile`}
+            className={`absolute object-cover z-10 ${
+              isMobileOnly
+                ? "w-[119px] h-[241px] md:w-[160px] md:h-[350px] top-[16%] md:top-[3%] left-[5%] md:left-[10%]"
+                : "w-[86px] h-[174px] md:w-[139px] md:h-[304px] top-[16%] md:top-[3%] left-[5%] md:left-[10%]"
+            }`}
           />
         </div>
       )}

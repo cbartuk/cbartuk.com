@@ -17,20 +17,14 @@ const levelRank: Record<string, number> = {
 export default function Skills({ skills }: Props) {
   const sortedSkills = [...skills].sort((a, b) => {
     const featuredDelta = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
-    if (featuredDelta !== 0) {
-      return featuredDelta;
-    }
+    if (featuredDelta !== 0) return featuredDelta;
 
     const levelDelta = (levelRank[b.level || ""] || 0) - (levelRank[a.level || ""] || 0);
-    if (levelDelta !== 0) {
-      return levelDelta;
-    }
+    if (levelDelta !== 0) return levelDelta;
 
     const orderA = a.order ?? Number.MAX_SAFE_INTEGER;
     const orderB = b.order ?? Number.MAX_SAFE_INTEGER;
-    if (orderA !== orderB) {
-      return orderA - orderB;
-    }
+    if (orderA !== orderB) return orderA - orderB;
 
     return a.title.localeCompare(b.title);
   });
@@ -40,7 +34,7 @@ export default function Skills({ skills }: Props) {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1.2 }}
-      className="h-screen flex relative flex-col max-w-6xl px-6 sm:px-10 pt-24 pb-10 mx-auto items-center"
+      className="h-screen flex relative flex-col max-w-7xl px-4 sm:px-8 lg:px-12 pt-24 pb-10 mx-auto items-center"
     >
       <h3 className="uppercase tracking-[20px] text-gray-500 text-2xl mb-2">
         Skills
@@ -49,7 +43,7 @@ export default function Skills({ skills }: Props) {
         Engineering capabilities and focus areas
       </p>
 
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto modifyScrollbar pr-2 pb-4">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 overflow-y-auto modifyScrollbar pr-1 pb-4">
         {sortedSkills.map((skill, index) => (
           <Skill key={skill._id || `${skill.title}-${index}`} skill={skill} index={index} />
         ))}

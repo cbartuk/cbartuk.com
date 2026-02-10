@@ -18,65 +18,73 @@ export default function ExperienceCard({ experience, index }: Props) {
           month: "short",
         });
 
+  const companyImgUrl = getImageUrl(experience?.companyImage);
+
   return (
-    <div className="relative flex items-start gap-5 pl-7">
+    <div className="relative flex items-start gap-4 sm:gap-5 pl-7">
       {/* Timeline dot */}
-      <div className="absolute left-0 top-6 w-[15px] h-[15px] rounded-full border-2 border-[#F7AB0A] bg-[#242424] z-10" />
+      <div className="absolute left-0 top-5 w-[15px] h-[15px] rounded-full border-2 border-[#F7AB0A] bg-[#242424] z-10" />
 
       {/* Card */}
       <motion.article
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
+        transition={{ duration: 0.45, delay: index * 0.08 }}
         viewport={{ once: true }}
-        className="flex-1 rounded-xl bg-[#292929] border border-white/[0.06] p-5 sm:p-6 hover:border-[#F7AB0A]/20 transition-colors duration-300"
+        className="flex-1 rounded-xl bg-[#292929] border border-white/[0.06] p-4 sm:p-5 hover:border-[#F7AB0A]/20 transition-colors duration-300"
       >
-        <div className="flex items-start gap-4 mb-3">
-          <img
-            src={getImageUrl(experience?.companyImage)}
-            alt={experience?.company}
-            className="w-11 h-11 sm:w-13 sm:h-13 rounded-lg object-contain bg-white/[0.05] p-1.5 flex-shrink-0"
-          />
-          <div className="min-w-0">
-            <h4 className="text-base sm:text-lg font-semibold text-white leading-tight">
+        {/* Header: logo + title block + date */}
+        <div className="flex items-start gap-3 mb-3">
+          {companyImgUrl && (
+            <img
+              src={companyImgUrl}
+              alt={experience?.company}
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-contain bg-white/[0.05] p-1 flex-shrink-0"
+            />
+          )}
+          <div className="min-w-0 flex-1">
+            <h4 className="text-sm sm:text-base font-semibold text-white leading-tight">
               {experience?.jobTitle}
             </h4>
-            <p className="text-[#F7AB0A] font-medium text-sm mt-0.5">
+            <p className="text-[#F7AB0A]/90 font-medium text-xs sm:text-sm mt-px">
               {experience?.company}
             </p>
-            <p className="text-gray-500 text-xs sm:text-sm mt-1">
-              {new Date(experience?.dateStarted).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-              })}{" "}
-              &mdash; {endDateLabel}
-            </p>
           </div>
+          <p className="text-gray-500 text-[11px] sm:text-xs whitespace-nowrap flex-shrink-0 pt-0.5">
+            {new Date(experience?.dateStarted).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+            })}{" "}
+            — {endDateLabel}
+          </p>
         </div>
 
         {/* Technologies */}
         {experience.technologies?.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
-            {experience.technologies.map((tech, techIndex) => (
-              <img
-                key={tech._id || `${tech.title}-${techIndex}`}
-                src={getImageUrl(tech.image)}
-                alt={tech.title}
-                title={tech.title}
-                className="w-6 h-6 rounded object-contain bg-white/[0.05] p-0.5"
-              />
-            ))}
+            {experience.technologies.map((tech, techIndex) => {
+              const techUrl = getImageUrl(tech.image);
+              return techUrl ? (
+                <img
+                  key={tech._id || `${tech.title}-${techIndex}`}
+                  src={techUrl}
+                  alt={tech.title}
+                  title={tech.title}
+                  className="w-5 h-5 sm:w-6 sm:h-6 rounded object-contain bg-white/[0.05] p-0.5"
+                />
+              ) : null;
+            })}
           </div>
         )}
 
         {/* Points */}
-        <ul className="space-y-1.5 text-gray-300 text-sm">
+        <ul className="space-y-1 text-gray-300 text-xs sm:text-sm">
           {experience.points.map((point, i) => (
             <li key={i} className="flex gap-2">
-              <span className="text-[#F7AB0A]/60 mt-0.5 flex-shrink-0 text-xs">
+              <span className="text-[#F7AB0A]/50 mt-0.5 flex-shrink-0 text-[10px]">
                 ▸
               </span>
-              <span>{point}</span>
+              <span className="leading-relaxed">{point}</span>
             </li>
           ))}
         </ul>
