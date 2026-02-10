@@ -4,6 +4,7 @@ import path from "node:path";
 const contentPath = path.join(process.cwd(), "data", "content.json");
 const raw = await fs.readFile(contentPath, "utf8");
 const content = JSON.parse(raw);
+const forceRuleValues = process.env.ENRICH_FORCE === "true";
 
 const skillRules = {
   "TypeScript": { category: "frontend", level: "advanced", yearsExperience: 4, tags: ["Type Safety", "Generics", "DX"], featured: true, currentlyUsing: true },
@@ -40,8 +41,9 @@ content.skills = (content.skills || [])
     const title = normalizeTitle(skill.title);
     const rule = skillRules[title] || {};
     const level =
-      rule.level ||
+      (forceRuleValues ? rule.level : undefined) ||
       skill.level ||
+      rule.level ||
       (skill.progress >= 85
         ? "advanced"
         : skill.progress >= 65
@@ -49,22 +51,43 @@ content.skills = (content.skills || [])
         : "beginner");
 
     const yearsExperience =
-      rule.yearsExperience ??
+      (forceRuleValues ? rule.yearsExperience : undefined) ??
       skill.yearsExperience ??
+      rule.yearsExperience ??
       Math.max(1, Math.round((skill.progress || 50) / 25));
 
     return {
       ...skill,
       title,
-      category: rule.category || skill.category || "frontend",
+      category:
+        (forceRuleValues ? rule.category : undefined) ||
+        skill.category ||
+        rule.category ||
+        "frontend",
       level,
       yearsExperience,
       summary:
+        (forceRuleValues ? rule.summary : undefined) ||
         skill.summary ||
+        rule.summary ||
         `${title} used in production-focused projects with clean architecture and maintainable implementation patterns.`,
-      tags: rule.tags || skill.tags || ["Web"],
-      featured: rule.featured ?? skill.featured ?? false,
-      currentlyUsing: rule.currentlyUsing ?? skill.currentlyUsing ?? true,
+      tags:
+        (forceRuleValues ? rule.tags : undefined) ||
+        skill.tags ||
+        rule.tags ||
+        ["Web"],
+      featured:
+        (forceRuleValues && rule.featured !== undefined
+          ? rule.featured
+          : skill.featured) ??
+        rule.featured ??
+        false,
+      currentlyUsing:
+        (forceRuleValues && rule.currentlyUsing !== undefined
+          ? rule.currentlyUsing
+          : skill.currentlyUsing) ??
+        rule.currentlyUsing ??
+        true,
       order: skill.order ?? index + 1,
     };
   });

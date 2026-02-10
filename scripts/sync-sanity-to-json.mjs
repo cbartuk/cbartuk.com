@@ -4,6 +4,30 @@ import { createClient } from "@sanity/client";
 
 const args = new Set(process.argv.slice(2));
 const bestEffort = args.has("--best-effort");
+const cwd = process.cwd();
+
+const loadEnvFile = async (filename) => {
+  try {
+    const filePath = path.join(cwd, filename);
+    const raw = await fs.readFile(filePath, "utf8");
+    raw.split("\n").forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return;
+      const eq = trimmed.indexOf("=");
+      if (eq === -1) return;
+      const key = trimmed.slice(0, eq).trim();
+      const value = trimmed.slice(eq + 1).trim();
+      if (key && process.env[key] === undefined) {
+        process.env[key] = value;
+      }
+    });
+  } catch {
+    // ignore missing env files
+  }
+};
+
+await loadEnvFile(".env");
+await loadEnvFile(".env.local");
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";

@@ -82,6 +82,14 @@ yarn sync:content:pipeline
 
 Bu pipeline lokal JSON'u senior odakli skill metadata ile zenginlestirir ve tekrar Sanity'ye yazar.
 
+Enrich davranisi:
+- Varsayilan: mevcut panel degerlerini ezmez, sadece eksikleri tamamlar.
+- Force override istersen:
+
+```bash
+ENRICH_FORCE=true yarn sync:content:pipeline
+```
+
 ## Otomatik Senkron Davranisi
 
 - `yarn dev` oncesi otomatik best-effort pull calisir (`predev`).
