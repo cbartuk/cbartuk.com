@@ -40,3 +40,7 @@ next-env.d.ts
 
 # local documentation
 docs/
+
+# generated local content snapshot
+data/content.json
+!data/content.example.json

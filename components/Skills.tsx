@@ -7,34 +7,51 @@ type Props = {
   skills: SkillType[];
 };
 
+const levelRank: Record<string, number> = {
+  expert: 4,
+  advanced: 3,
+  intermediate: 2,
+  beginner: 1,
+};
+
 export default function Skills({ skills }: Props) {
-  const sortedSkills = [...skills].sort((a, b) => b.progress - a.progress);
+  const sortedSkills = [...skills].sort((a, b) => {
+    const featuredDelta = Number(Boolean(b.featured)) - Number(Boolean(a.featured));
+    if (featuredDelta !== 0) {
+      return featuredDelta;
+    }
+
+    const levelDelta = (levelRank[b.level || ""] || 0) - (levelRank[a.level || ""] || 0);
+    if (levelDelta !== 0) {
+      return levelDelta;
+    }
+
+    const orderA = a.order ?? Number.MAX_SAFE_INTEGER;
+    const orderB = b.order ?? Number.MAX_SAFE_INTEGER;
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    return a.title.localeCompare(b.title);
+  });
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="h-screen flex relative overflow-hidden flex-col md:flex-row max-w-full px-10 pt-24 md:pt-0 justify-evenly mx-auto items-center"
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 1.2 }}
+      className="h-screen flex relative flex-col max-w-6xl px-6 sm:px-10 pt-24 pb-10 mx-auto items-center"
     >
-      <h3 className="absolute top-16 uppercase tracking-[20px] text-gray-500 text-2xl z-10">
+      <h3 className="uppercase tracking-[20px] text-gray-500 text-2xl mb-2">
         Skills
       </h3>
+      <p className="uppercase tracking-[3px] text-gray-500 text-sm mb-8">
+        Engineering capabilities and focus areas
+      </p>
 
-      <h3 className="absolute top-24 uppercase tracking-[3px] text-gray-500 text-sm">
-        Hover over a skill for current proficiency
-      </h3>
-
-      <div
-        className="grid grid-cols-4 gap-5 max-h-[28rem] sm:max-h-[36rem] pr-8 overflow-y-scroll scrollbar-thin scrollbar-track-black scrollbar-thumb-[#F7AB0A]/80"
-        style={{ overflowX: "hidden" }}
-      >
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto modifyScrollbar pr-2 pb-4">
         {sortedSkills.map((skill, index) => (
-          <Skill
-            key={skill._id}
-            skill={skill}
-            directionLeft={index % 2 === 1}
-          />
+          <Skill key={skill._id || `${skill.title}-${index}`} skill={skill} index={index} />
         ))}
       </div>
     </motion.div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { PageInfo } from "@/typings";
-import { urlFor } from "@/sanity";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 type Props = {
   pageInfo: PageInfo;
@@ -40,7 +40,7 @@ export default function About({ pageInfo }: Props) {
         viewport={{
           once: true,
         }}
-        src={urlFor(pageInfo?.profilePic).url()}
+        src={getImageUrl(pageInfo?.profilePic)}
         className="-mb-32 md:mb-0 flex-shrink-0 w-36 h-36 sm:w-48 sm:h-48 rounded-full object-cover md:rounded-lg md:w-64 md:h-95 xl:w-[500px] xl:h-[500px]"
       />
 

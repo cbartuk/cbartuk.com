@@ -1,11 +1,11 @@
 interface SanityBody {
-  _createdAt: string;
-  _id: string;
-  _rev: string;
-  _updatedAt: string;
+  _createdAt?: string;
+  _id?: string;
+  _rev?: string;
+  _updatedAt?: string;
 }
 
-interface Image {
+interface ImageAssetRef {
   _type: "image";
   asset: {
     _ref: string;
@@ -13,31 +13,33 @@ interface Image {
   };
 }
 
+export type ImageSource = ImageAssetRef | string;
+
 export interface PageInfo extends SanityBody {
   _type: "pageInfo";
   address: string;
   backgroundInformation: string;
   email: string;
   role: string;
-  heroImage: Image;
+  heroImage: ImageSource;
   name: string;
   phoneNumber: string;
-  profilePic: Image;
+  profilePic: ImageSource;
 }
 
 export interface Technology extends SanityBody {
   _type: "skill";
-  image: Image;
-  progress: number;
+  image: ImageSource;
+  progress?: number;
   title: string;
 }
 
 export interface Experience extends SanityBody {
   _type: "experience";
   company: string;
-  companyImage: Image;
+  companyImage: ImageSource;
   dateStarted: string;
-  dateEnded: string;
+  dateEnded?: string;
   isCurrentlyWorkingHere: boolean;
   jobTitle: string;
   points: string[];
@@ -47,19 +49,35 @@ export interface Experience extends SanityBody {
 export interface Project extends SanityBody {
   title: string;
   _type: "project";
-  desktopImage: Image;
-  tabletImage: Image;
-  mobileImage: Image;
-  linkToBuild: string;
+  desktopImage?: ImageSource;
+  tabletImage?: ImageSource;
+  mobileImage?: ImageSource;
+  deviceTargets?: Array<"desktop" | "tablet" | "mobile">;
+  linkToBuild?: string;
   summary: string;
   technologies: Technology[];
 }
 
 export interface Skill extends SanityBody {
   _type: "skill";
-  image: Image;
-  progress: number;
+  image: ImageSource;
   title: string;
+  category?:
+    | "frontend"
+    | "mobile"
+    | "testing"
+    | "tooling"
+    | "platform"
+    | "backend"
+    | "design";
+  level?: "beginner" | "intermediate" | "advanced" | "expert";
+  yearsExperience?: number;
+  summary?: string;
+  featured?: boolean;
+  order?: number;
+  tags?: string[];
+  currentlyUsing?: boolean;
+  progress?: number;
 }
 
 export interface Social extends SanityBody {

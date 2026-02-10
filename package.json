@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/sync-sanity-to-json.mjs --best-effort",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync:content": "node scripts/sync-sanity-to-json.mjs",
+    "sync:content:pull": "node scripts/sync-sanity-to-json.mjs",
+    "sync:content:push": "node scripts/sync-json-to-sanity.mjs",
+    "sync:content:roundtrip": "yarn sync:content:pull && yarn sync:content:push",
+    "sync:content:pipeline": "node scripts/run-content-pipeline.mjs"
   },
   "dependencies": {
     "@heroicons/react": "2.0.11",

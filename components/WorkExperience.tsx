@@ -9,31 +9,37 @@ type Props = {
 
 export default function WorkExperience({ experiences }: Props) {
   const sortedExperiences = [...experiences].sort((a, b) => {
-    if (a.isCurrentlyWorkingHere && !b.isCurrentlyWorkingHere) {
-      return -1;
-    }
-    if (!a.isCurrentlyWorkingHere && b.isCurrentlyWorkingHere) {
-      return 1;
-    }
-    const dateA: any = new Date(a.dateStarted).getTime();
-    const dateB: any = new Date(b.dateStarted).getTime();
-    return dateB - dateA;
+    if (a.isCurrentlyWorkingHere && !b.isCurrentlyWorkingHere) return -1;
+    if (!a.isCurrentlyWorkingHere && b.isCurrentlyWorkingHere) return 1;
+    return (
+      new Date(b.dateStarted).getTime() - new Date(a.dateStarted).getTime()
+    );
   });
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1.5 }}
-      className="h-screen flex relative overflow-hidden flex-col md:flex-row max-w-full px-10 pt-24 md:pt-0 justify-evenly mx-auto items-center"
+      className="h-screen flex relative flex-col max-w-4xl px-6 sm:px-10 pt-24 pb-10 mx-auto items-center"
     >
-      <h3 className="absolute top-16 uppercase tracking-[20px] text-gray-500 text-2xl z-10">
+      <h3 className="uppercase tracking-[20px] text-gray-500 text-2xl mb-8 flex-shrink-0">
         Experience
       </h3>
 
-      <div className="w-full flex space-x-5 overflow-x-scroll p-10 snap-x snap-mandatory modifyScrollbar mt-10 md:mt-0">
-        {sortedExperiences.map((experience) => (
-          <ExperienceCard key={experience._id} experience={experience} />
-        ))}
+      <div className="relative w-full flex-1 overflow-y-auto modifyScrollbar pr-2">
+        {/* Timeline line */}
+        <div className="absolute left-[7px] top-0 bottom-0 w-px bg-gradient-to-b from-[#F7AB0A]/40 via-[#F7AB0A]/20 to-transparent" />
+
+        <div className="space-y-6 pb-4">
+          {sortedExperiences.map((experience, i) => (
+            <ExperienceCard
+              key={experience._id || `${experience.company}-${experience.jobTitle}-${i}`}
+              experience={experience}
+              index={i}
+            />
+          ))}
+        </div>
       </div>
     </motion.div>
   );

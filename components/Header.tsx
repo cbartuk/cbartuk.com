@@ -31,9 +31,9 @@ export default function Header({ socials }: Props) {
       >
         {/* Social Icons */}
 
-        {orderedSocials.map((social) => (
+        {orderedSocials.map((social, index) => (
           <SocialIcon
-            key={social._id}
+            key={social._id || `${social.url}-${index}`}
             url={social.url}
             target="_blank"
             rel="noopener noreferrer"

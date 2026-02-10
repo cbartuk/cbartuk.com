@@ -4,7 +4,7 @@ import React from "react";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 import BackgroundCircles from "./BackgroundCircles";
 import { PageInfo } from "@/typings";
-import { urlFor } from "@/sanity";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 type Props = {
   pageInfo: PageInfo;
@@ -26,7 +26,7 @@ export default function Hero({ pageInfo }: Props) {
       <BackgroundCircles />
       <img
         className="relative rounded-full w-32 h-32 mx-auto object-cover"
-        src={urlFor(pageInfo?.heroImage).url()}
+        src={getImageUrl(pageInfo?.heroImage)}
         alt="Motorcycle"
       />
       <div className="z-20">
