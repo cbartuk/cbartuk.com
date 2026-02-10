@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function Skills({ skills }: Props) {
-  const sortedSkills = skills.sort((a, b) => b.progress - a.progress);
+  const sortedSkills = [...skills].sort((a, b) => b.progress - a.progress);
 
   return (
     <motion.div

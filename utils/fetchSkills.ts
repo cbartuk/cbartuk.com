@@ -1,20 +1,17 @@
 import { Skill } from "@/typings";
+import { groq } from "next-sanity";
+import { sanityClient } from "@/sanity";
+
+const query = groq`
+*[_type == "skill"]
+`;
 
 export const fetchSkills = async (): Promise<Skill[]> => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/getSkills`
-    );
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch skills');
-    }
-
-    const data = await res.json();
-    const skills: Skill[] = data.skills;
+    const skills: Skill[] = await sanityClient.fetch(query);
     return skills;
   } catch (error) {
-    console.error('Error fetching skills:', error);
+    console.error("Error fetching skills:", error);
     return [];
   }
 };

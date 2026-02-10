@@ -1,11 +1,11 @@
 import React from "react";
 import {
   PhoneIcon,
-  MapIcon,
   EnvelopeIcon,
   MapPinIcon,
 } from "@heroicons/react/24/solid";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { PageInfo } from "@/typings";
 
 type Inputs = {
   name: string;
@@ -13,13 +13,16 @@ type Inputs = {
   subject: string;
   message: string;
 };
-type Props = {};
+type Props = {
+  pageInfo: PageInfo;
+};
 
-export default function ContactMe({}: Props) {
+export default function ContactMe({ pageInfo }: Props) {
   const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = (formData) => {
-    window.location.href = `mailto:hello@cbartuk.com?subject=${formData.subject}&body=Hi, my name is ${formData.name}, ${formData.message} (sent from ${formData.email})`;
+    const targetEmail = pageInfo?.email || "me@cbartuk.com";
+    window.location.href = `mailto:${targetEmail}?subject=${formData.subject}&body=Hi, my name is ${formData.name}, ${formData.message} (sent from ${formData.email})`;
   };
 
   return (
@@ -39,18 +42,20 @@ export default function ContactMe({}: Props) {
         <div className="space-y-10">
           <div className="flex item-center space-x-5 justify-center">
             <PhoneIcon className="text-[#F7AB0A] h-7 w-7 animate-pulse" />
-            <p className="text-base sm:text-xl xl:text-2xl">+1212121254</p>
+            <p className="text-base sm:text-xl xl:text-2xl">
+              {pageInfo?.phoneNumber}
+            </p>
           </div>
 
           <div className="flex item-center space-x-5 justify-center">
             <EnvelopeIcon className="text-[#F7AB0A] h-7 w-7 animate-pulse" />
-            <p className="text-base sm:text-xl xl:text-2xl">me@cbartuk.com</p>
+            <p className="text-base sm:text-xl xl:text-2xl">{pageInfo?.email}</p>
           </div>
 
           <div className="flex item-center space-x-5 justify-center">
             <MapPinIcon className="text-[#F7AB0A] h-7 w-7 animate-pulse" />
             <p className="text-base sm:text-xl xl:text-2xl">
-              123 Developer Lane
+              {pageInfo?.address}
             </p>
           </div>
         </div>

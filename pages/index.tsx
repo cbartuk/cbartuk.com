@@ -26,11 +26,6 @@ type Props = {
   socials: Social[];
 };
 
-(async () => {
-  const pageInfo = await fetchPageInfo();
-  console.log(pageInfo);
-})();
-
 export const getStaticProps: GetStaticProps<Props> = async () => {
   try {
     const pageInfo: PageInfo | null = await fetchPageInfo();
@@ -82,11 +77,12 @@ export default function Home({
         <p className="text-lg mb-8">
           An error occurred while loading the page information.
         </p>
-        <Link href="/">
-          <a className="flex items-center gap-2 bg-yellow-500 text-gray-900 py-2 px-4 rounded hover:bg-yellow-600 transition duration-300">
-            <HomeIcon className="h-6 w-6" />
-            <span>Back to Home</span>
-          </a>
+        <Link
+          href="/"
+          className="flex items-center gap-2 bg-yellow-500 text-gray-900 py-2 px-4 rounded hover:bg-yellow-600 transition duration-300"
+        >
+          <HomeIcon className="h-6 w-6" />
+          <span>Back to Home</span>
         </Link>
       </div>
     );
@@ -94,7 +90,7 @@ export default function Home({
   return (
     <div className="bg-[rgb(36,36,36)] text-white h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden z-0 modifyScrollbar">
       <Head>
-        <title>Bartu`s Portolio</title>
+        <title>Bartu`s Portfolio</title>
       </Head>
 
       <Header socials={socials} />
@@ -120,7 +116,7 @@ export default function Home({
       </section>
 
       <section id="contact" className="snap-start">
-        <ContactMe />
+        <ContactMe pageInfo={pageInfo} />
       </section>
 
       <Link href="#hero">

@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function WorkExperience({ experiences }: Props) {
-  const sortedExperiences = experiences.sort((a, b) => {
+  const sortedExperiences = [...experiences].sort((a, b) => {
     if (a.isCurrentlyWorkingHere && !b.isCurrentlyWorkingHere) {
       return -1;
     }
